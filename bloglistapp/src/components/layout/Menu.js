@@ -1,26 +1,31 @@
 import React from 'react'
 import { Link } from "react-router-dom"
-import { Navbar, Nav } from 'react-bootstrap'
+import { AppBar, Toolbar, IconButton, Button } from '@material-ui/core'
+
 export const Menu = ({user, handleLogoutSubmit}) => {
   const padding = {
     paddingRight: 5
   }
   return (
-    <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-      <Navbar.Toggle bg="primary" aria-controls="responsive-navbar-nav" />
-      <Navbar.Collapse id="responsive-navbar-nav">
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton edge="start" color="inherit" aria-label="menu">
+        </IconButton>
         {/* <Link to='login'>Login </Link> */}
-        <Nav.Link as="span">
-          <Link to='/' style={padding}>Blogs</Link>
-        </Nav.Link>
-        <Nav.Link as="span">
-          <Link to='/createBlog' style={padding}>Create New</Link>
-        </Nav.Link>
+        <Button color="inherit" component={Link} to="/">
+          home
+        </Button>
+        <Button color="inherit" component={Link} to="/blogs">
+          Blogs
+        </Button>
+        <Button color="inherit" component={Link} to="/createBlog">
+          Create New
+        </Button>
         {/* <Link to='/about' style={padding}>About</Link> */}
-      </Navbar.Collapse>
       {user !== null &&
-          <p>{user.username} <span><button onClick={(e) => handleLogoutSubmit(e)}>logout</button></span></p>
+          <p style={{marginBottom: "0"}}>{user.username} <span><Button color="inherit" onClick={(e) => handleLogoutSubmit(e)}>logout</Button></span></p>
       }
-    </Navbar>
+      </Toolbar>
+    </AppBar>
   )
 }

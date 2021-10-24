@@ -71,7 +71,7 @@ html, body {
 
 .footer {
   position: relative;
-  margin-top: -100px;
+  margin-top: -180px;
   /* negative value of footer height */
 }
 

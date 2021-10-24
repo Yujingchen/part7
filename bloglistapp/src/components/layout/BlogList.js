@@ -1,18 +1,26 @@
 import React from 'react'
 import Blog from '../Blog'
-import { Table } from 'react-bootstrap';
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableRow,
+  Paper,
+} from '@material-ui/core'
 
  export const BlogList = ({blogs, handleLikesIncrease, handleBlogDelete}) => {
     return (
       <div>
         <h2>Blogs</h2>
+        <TableContainer component={Paper}>
         <Table>
-          <tbody>
+          <TableBody>
           {blogs.map(blog =>
-            <tr key={blog.id}><Blog blog={blog} handleLikes={handleLikesIncrease} handleDelete={handleBlogDelete} /></tr>
+            <TableRow key={blog.id}><Blog blog={blog} handleLikes={handleLikesIncrease} handleDelete={handleBlogDelete} /></TableRow>
           )}
-          </tbody>
+          </TableBody>
         </Table>
+        </TableContainer>
       </div>
     )
   }

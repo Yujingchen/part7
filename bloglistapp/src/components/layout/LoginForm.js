@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Table, Form, Button } from 'react-bootstrap'
-
+import { TextField, Button } from '@material-ui/core'
 const LoginForm = ({
   loginUser,
 }) => {
@@ -33,21 +32,17 @@ const LoginForm = ({
 
   return (
     <div>
-      <Form onSubmit={login}>
-        <Form.Group>
+      <form onSubmit={login}>
           <div>
-            <Form.Label>username </Form.Label>
-            <Form.Control type='text' value={username} name="username" id='username'
+            <TextField label="username" type='text' value={username} name="username" id='username'
               onChange={(event) => handleTextChange(event)} />
           </div>
           <div>
-            <Form.Label>password </Form.Label>
-            <Form.Control type='password' value={password} name="password" id="password"
+            <TextField label="password" type='password' value={password} name="password" id="password"
               onChange={(event) => handleTextChange(event)} />
           </div>
-          <Button variant="primary" type="submit" id="login-button">login</Button>
-        </Form.Group>
-      </Form>
+          <Button variant="contained" color="primary" type="submit" id="login-button">login</Button>
+      </form>
     </div>
   )
 }

@@ -2,16 +2,16 @@ import React, { useState, useRef, useEffect } from 'react'
 import {
   Switch, Route, useHistory
 } from "react-router-dom"
-import Togglable from './components/Togglable'
+import Container from '@material-ui/core/Container'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import LoginForm from './components/layout/LoginForm'
 import { Menu } from './components/layout/Menu'
 import { Notification } from './components/layout/Notification'
 import { BlogList } from './components/layout/BlogList'
 import { CreateNew } from './components/layout/CreateNew'
 import { Footer } from './components/layout/Footer'
 import { Login } from './components/layout/Login'
+import { Home } from './components/layout/Home'
 
 import './App.css'
 
@@ -147,7 +147,7 @@ const App = () => {
 
 
   return (
-    <div style={{height:"100%", width:"100%"}} className="container">
+    <Container style={{height:"100%", width:"100%"}} className="container">
       <Menu user={user} handleLogoutSubmit={handleLogoutSubmit}/>
       <Notification errorMessage={errorMessage} notification={notification}/>
       {user === null &&
@@ -159,14 +159,17 @@ const App = () => {
             <Route path="/createBlog">
               <CreateNew handleSaveSubmit={handleSaveSubmit} formRef={blogFormRef}/>
             </Route>
-            <Route path="/">
+            <Route path="/blogs">
               <BlogList blogs={blogs} handleLikesIncrease={handleLikesIncrease} handleBlogDelete={handleBlogDelete}/>
+            </Route>
+            <Route path="/">
+              <Home/>
             </Route>
           </Switch>
         </div>
       }
       <Footer/>
-    </div >
+    </Container >
   )
 }
 export default App
