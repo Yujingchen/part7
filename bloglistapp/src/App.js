@@ -3,6 +3,7 @@ import {
   Switch, Route, useHistory
 } from "react-router-dom"
 import Container from '@material-ui/core/Container'
+import { useSelector, useDispatch } from 'react-redux'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { Menu } from './components/layout/Menu'
@@ -12,15 +13,18 @@ import { CreateNew } from './components/layout/CreateNew'
 import { Footer } from './components/layout/Footer'
 import { Login } from './components/layout/Login'
 import { Home } from './components/layout/Home'
-
+import { initBlogAction } from './reducer/blogReducer'
+import { setNotification, clearNotification } from './reducer/notificationReducer'
 import './App.css'
 
 const App = () => {
+  const dispatch = useDispatch();
+  const initBlogs = useSelector(state => state.blogs)
+  const notification = useSelector(state.notification)
   const [blogs, setBlogs] = useState([])
+  console.log('initBlogs',initBlogs)
+  console.log('blogs',blogs)
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [notification, setNotification] = useState('')
-
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -28,11 +32,12 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
-    blogService.getAll().then(blogs => {
-      sortBlogsByLikeCount(blogs)
-      setBlogs(blogs)
-    })
-  }, [])
+    dispatch(initBlogAction())
+  }, [dispatch])
+
+  useEffect(()=>{
+    setBlogs(initBlogs)
+  },[initBlogs])
 
   const handleLoginSubmit = async (loginData) => {
     try {
@@ -49,10 +54,10 @@ const App = () => {
       }, 5000)
     }
     catch (error) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      // setErrorMessage('Wrong credentials')
+      // setTimeout(() => {
+      //   setErrorMessage(null)
+      // }, 5000)
     }
   }
 
@@ -60,12 +65,6 @@ const App = () => {
     event.preventDefault()
     setUser(null)
     window.localStorage.removeItem('loggedBlogappUser')
-  }
-
-  const sortBlogsByLikeCount = (blogs) => {
-    blogs.sort(function (a, b) {
-      return b.likes - a.likes
-    })
   }
 
   const blogFormRef = useRef(null)
@@ -77,18 +76,19 @@ const App = () => {
       const savedBlog = await blogService.postNewBlog(newBlog)
       const newBlogs = blogs.concat(savedBlog)
       setBlogs(newBlogs)
-
-      setNotification(`a new blog ${newBlog.title} by ${newBlog.author} added`)
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
-      history.push('/')
+      dispatch(setNotification(`a new blog ${newBlog.title} by ${newBlog.author} added!!`))
+      dispatch(clearNotification(5))
+      // setNotification(`a new blog ${newBlog.title} by ${newBlog.author} added`)
+      // setTimeout(() => {
+      //   setNotification('')
+      // }, 5000)
+      history.push('/blogs')
     }
     catch (error) {
-      setTimeout(() => {
-        setErrorMessage('')
-      }, 5000)
-      setErrorMessage('something went wrong when saving the new blog, please enter again')
+      // setTimeout(() => {
+      //   setErrorMessage('')
+      // }, 5000)
+      // setErrorMessage('something went wrong when saving the new blog, please enter again')
     }
   }
 
@@ -112,10 +112,10 @@ const App = () => {
     }
     catch (error) {
       console.log(error)
-      setTimeout(() => {
-        setErrorMessage('')
-      }, 5000)
-      setErrorMessage('something went wrong when updating like for the blog, please enter again')
+      // setTimeout(() => {
+      //   setErrorMessage('')
+      // }, 5000)
+      // setErrorMessage('something went wrong when updating like for the blog, please enter again')
     }
   }
 
@@ -129,16 +129,16 @@ const App = () => {
         await blogService.deleteBlog(blogToDelete)
         const newBlogs = blogs.filter(blog => blog.id !== id)
         setBlogs(newBlogs)
-      setNotification(`Blog by ${blogToDelete.author} is deleted`)
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
+      // setNotification(`Blog by ${blogToDelete.author} is deleted`)
+      // setTimeout(() => {
+      //   setNotification('')
+      // }, 5000)
       }
       catch (error) {
-        setTimeout(() => {
-          setErrorMessage('')
-        }, 5000)
-        setErrorMessage('something went wrong when deleting the blog, please enter again')
+        // setTimeout(() => {
+        //   setErrorMessage('')
+        // }, 5000)
+        // setErrorMessage('something went wrong when deleting the blog, please enter again')
       }
     }
   }

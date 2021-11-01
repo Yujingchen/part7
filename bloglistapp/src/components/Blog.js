@@ -21,7 +21,7 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
     )
 
   return (
-    <div className="blog" style={{ margin: '15px 0', padding: '0 5px' }}>
+    <td className="blog" style={{ margin: '15px 0', padding: '0 5px' }}>
       <span >{blog.title}</span>
       <span>{blog.author}</span>
       <button style={{ margin: '5px 10px' } } className="showButton" onClick={toggleVisibility}>
@@ -30,7 +30,7 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
       <button className="deleteButton" onClick={(event) => handleDelete(event, blog.id)}>delete
       </button>
       {blogContent}
-    </div>
+    </td>
   )
 }
 
