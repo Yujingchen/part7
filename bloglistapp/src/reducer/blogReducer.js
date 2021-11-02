@@ -10,6 +10,8 @@ const reducer = (state = initialState, action) => {
             return addBlog(state, action.data)
         case 'UPDATE_BLOGS':
             return updateBlog(state, action.data)
+        case 'UPDATE_BLOG_COMMENT':
+            return updateBlog(state, action.data)
         case 'DELETE_BLOGS':
             return deleteBlog(state, action.data)
         default:
@@ -41,10 +43,11 @@ export const addBlogAction = (blog) => {
 }
 
 const updateBlog = (state, data) => {
-    const { id, likes } = data
+    const { id, likes, comments } = data
     const newState = state.map(blog=>{
         if(blog.id === id) {
             blog.likes = likes
+            blog.comments = comments
             return blog
         }
         return blog
@@ -54,18 +57,24 @@ const updateBlog = (state, data) => {
 }
 
 export const updateBlogAction = (blog) => {
-    const { id, likes } = blog
-    const incrementlikes =  likes++
-    const newBlog = {...blog, likes: incrementlikes}
+    const { id } = blog
     return async (dispatch) => {
-        await blogsService.updateBlog(id, newBlog)
-        dispatch ({type:'UPDATE_BLOGS', data: newBlog})
+        await blogsService.updateBlog(id, blog)
+        dispatch ({type:'UPDATE_BLOGS', data: blog})
     }
 }
 
-const deleteBlog = (state, id) => {
+export const updateBlogCommentAction = (blog) => {
+    const { id } = blog
+    return async (dispatch) => {
+        await blogsService.updateBlogComment(id, blog)
+        dispatch ({type:'UPDATE_BLOG_COMMENT', data: blog})
+    }
+}
+
+const deleteBlog = (state, data) => {
     const newState = state.filter(blog=>{
-        if(blog.id !== id) {
+        if(blog.id !== data.id) {
             return blog
         }
     })
@@ -73,10 +82,10 @@ const deleteBlog = (state, id) => {
     return newState
 }
 
-export const deleteBlogAction = (id) => {
+export const deleteBlogAction = (blog) => {
     return async (dispatch) => {
-        await blogsService.deleteBlog(id)
-        dispatch ({type:'DELETE_BLOGS', data: id})
+        await blogsService.deleteBlog(blog)
+        dispatch ({type:'DELETE_BLOGS', data: blog})
     }
 }
 

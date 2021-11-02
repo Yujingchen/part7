@@ -21,6 +21,9 @@ export const Menu = ({user, handleLogoutSubmit}) => {
         <Button color="inherit" component={Link} to="/createBlog">
           Create New
         </Button>
+        <Button color="inherit" component={Link} to="/users">
+          Users
+        </Button>
         {/* <Link to='/about' style={padding}>About</Link> */}
       {user !== null &&
           <p style={{marginBottom: "0"}}>{user.username} <span><Button color="inherit" onClick={(e) => handleLogoutSubmit(e)}>logout</Button></span></p>
